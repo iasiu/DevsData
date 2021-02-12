@@ -28,6 +28,7 @@ wheel      -   0.36.2<br />
 ## Instruction
 
 """</br>
+source venv/bin/activate
 python api.py<br />
 python app.py<br />
 """
