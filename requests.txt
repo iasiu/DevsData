@@ -1,0 +1,13 @@
+EXAMPLE GET ALL EVENTS:
+curl http://localhost:5000/events
+
+EXAMPLE POST EVENT:
+
+EXAMPLE GET EVENT OF ID = 1:
+curl http://localhost:5000/events/1
+
+EXAMPLE PUT EVENT OF ID = 4:
+curl http://localhost:5000/events/4 -d "title=TEST-title" -d "start_date=TEST-start_date" -d "end_date=TEST-end_date" -d "thumbnail=TEST-thumbnail" -X PUT -v
+
+EXAMPLE DELETE EVENT OD IF = 4:
+curl http://localhost:5000/events/4 -X DELETE -v
