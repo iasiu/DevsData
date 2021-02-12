@@ -32,12 +32,6 @@ DATA = {
          'end_date': '2021-02-14 21:00:00',
          'thumbnail': 'https://www.jealousgallery.com/Images/Prints/Dave-Buonaguidi-Have-A-Nice-Day-Ice-Cream-Cones.jpg?Action=thumbnail&Width=500'
         },
-        {'id': 4,
-         'title': 'TEST',
-         'start_date': 'TEST',
-         'end_date': 'TEST',
-         'thumbnail': 'TEST'
-        },
 
     ],
 
