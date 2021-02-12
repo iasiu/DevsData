@@ -45,16 +45,28 @@ DATA = {
         {'event_id': 0,
          'name': 'Jan Lewandowski',
          'code': 'aaaa1111aaaa',
+        },
+        {'event_id': 0,
+         'name': 'Ala Lewandowska',
+         'code': 'bbbb1111aaaa',
         }
     ]
 }
 
 parser = reqparse.RequestParser()
-parser.add_argument('id')
 parser.add_argument('title')
 parser.add_argument('start_date')
 parser.add_argument('end_date')
 parser.add_argument('thumbnail')
+
+def abort_if_reservation_doesnt_exist(code):
+    codes = []
+
+    for r in DATA['reservations']:
+        codes.append(r['code'])
+
+    if id not in ids:
+        abort(404, message="Reservation of code {} doesn't exist".format(code))
 
 def abort_if_event_doesnt_exist(id):
     ids = []
@@ -74,8 +86,33 @@ def abort_if_event_does_exist(id):
     if int(id) in ids:
         abort(404, message="Event of id {} already exists".format(id))
 
-class Reservations(Resource):
-    pass
+class Reservation(Resource):
+    def get(self, code):
+        abort_if_reservation_doesnt_exist(code)
+        for n, reservation in enumerate(DATA['reservations']):
+            if int(reservation['code']) == code:
+                return DATA['reservations'][n]
+
+    def delete(self, id):
+        abort_if_event_doesnt_exist(id)
+        for n, event in enumerate(DATA['events']):
+            if int(event['id']) == int(id):
+                del DATA['events'][n]
+
+        return '', 204
+
+    def put(self, id):
+        abort_if_event_doesnt_exist(id)
+
+        args = parser.parse_args()
+
+        e = {'id': int(id),
+         'title': args['title'],
+         'start_date': args['start_date'],
+         'end_date': args['end_date'],
+         'thumbnail': args['thumbnail'],
+        }
+
 
 class Events(Resource):
     def get(self):
@@ -84,9 +121,7 @@ class Events(Resource):
     def post(self):
         args = parser.parse_args()
 
-        abort_if_event_does_exist(int(args['id']))
-
-        e = {'id': int(args['id']),
+        e = {'id': int(DATA['events'][-1]['id']) + 1,
          'title': args['title'],
          'start_date': args['start_date'],
          'end_date': args['end_date'],
@@ -95,7 +130,7 @@ class Events(Resource):
 
         DATA['events'].append(e)
 
-        return DATA['events'][int(args['id'])]
+        return DATA['events'][-1]
 
 class Event(Resource):
     def get(self, id):
@@ -133,6 +168,8 @@ class Event(Resource):
 
 api.add_resource(Events, '/events')
 api.add_resource(Event, '/events/<id>')
+#api.add_resource(Reservation, '/reservation')
+#api.add_resource(Reservation, '/reservations/<code>')
 
 if __name__ == "__main__":
     app.run()

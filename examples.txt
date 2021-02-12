@@ -2,7 +2,7 @@ EXAMPLE GET ALL EVENTS:
 curl http://localhost:5000/events
 
 EXAMPLE POST EVENT:
-curl http://localhost:5000/events -d "id=5" -d "title=TEST-title" -d "start_date=TEST-start_date" -d "end_date=TEST-end_date" -d "thumbnail=TEST-thumbnail" -X POST -v
+curl http://localhost:5000/events -d "title=TEST-title" -d "start_date=TEST-start_date" -d "end_date=TEST-end_date" -d "thumbnail=TEST-thumbnail" -X POST -v
 
 EXAMPLE GET EVENT OF ID = 1:
 curl http://localhost:5000/events/1
