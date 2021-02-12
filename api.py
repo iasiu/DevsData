@@ -58,6 +58,9 @@ parser.add_argument('title')
 parser.add_argument('start_date')
 parser.add_argument('end_date')
 parser.add_argument('thumbnail')
+parser.add_argument('event_id')
+parser.add_argument('name')
+parser.add_argument('code')
 
 def abort_if_reservation_doesnt_exist(code):
     codes = []
@@ -65,7 +68,7 @@ def abort_if_reservation_doesnt_exist(code):
     for r in DATA['reservations']:
         codes.append(r['code'])
 
-    if id not in ids:
+    if code not in codes:
         abort(404, message="Reservation of code {} doesn't exist".format(code))
 
 def abort_if_event_doesnt_exist(id):
@@ -86,32 +89,52 @@ def abort_if_event_does_exist(id):
     if int(id) in ids:
         abort(404, message="Event of id {} already exists".format(id))
 
+class Reservations(Resource):
+    def get(self):
+        return DATA['reservations']
+
+    def post(self):
+        args = parser.parse_args()
+
+        r = {'event_id': args['event_id'],
+         'name': args['name'],
+         'code': args['code'],
+        }
+
+        DATA['reservations'].append(r)
+
+        return DATA['reservations'][-1]
+
 class Reservation(Resource):
     def get(self, code):
         abort_if_reservation_doesnt_exist(code)
         for n, reservation in enumerate(DATA['reservations']):
-            if int(reservation['code']) == code:
+            if reservation['code'] == code:
                 return DATA['reservations'][n]
 
-    def delete(self, id):
-        abort_if_event_doesnt_exist(id)
-        for n, event in enumerate(DATA['events']):
-            if int(event['id']) == int(id):
-                del DATA['events'][n]
+    def delete(self, code):
+        abort_if_reservation_doesnt_exist(code)
+        for n, reservation in enumerate(DATA['reservations']):
+            if reservation['code'] == code:
+                del DATA['reservations'][n]
 
         return '', 204
 
-    def put(self, id):
-        abort_if_event_doesnt_exist(id)
+    def put(self, code):
+        abort_if_reservation_doesnt_exist(code)
 
         args = parser.parse_args()
 
-        e = {'id': int(id),
-         'title': args['title'],
-         'start_date': args['start_date'],
-         'end_date': args['end_date'],
-         'thumbnail': args['thumbnail'],
+        r = {'event_id': args['event_id'],
+         'name': args['name'],
+         'code': code,
         }
+
+        for n, reservation in enumerate(DATA['reservations']):
+            if reservation['code'] == code:
+                DATA['reservations'][n] = r
+
+        return DATA['reservations'][n], 201
 
 
 class Events(Resource):
@@ -165,11 +188,10 @@ class Event(Resource):
 
         return DATA['events'][n], 201
 
-
+api.add_resource(Reservations, '/reservations')
+api.add_resource(Reservation, '/reservations/<code>')
 api.add_resource(Events, '/events')
 api.add_resource(Event, '/events/<id>')
-#api.add_resource(Reservation, '/reservation')
-#api.add_resource(Reservation, '/reservations/<code>')
 
 if __name__ == "__main__":
     app.run()

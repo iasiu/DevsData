@@ -12,3 +12,18 @@ curl http://localhost:5000/events/4 -d "title=TEST-title" -d "start_date=TEST-st
 
 EXAMPLE DELETE EVENT OD IF = 4:
 curl http://localhost:5000/events/4 -X DELETE -v
+
+EXAMPLE POST RESERVATION:
+curl http://localhost:5000/reservations -d "event_id=TEST-event_id" -d "name=TEST-name" -d "code=TEST-code" -X POST -v
+
+EXAMPLE GET ALL RESERVATIONS:
+curl http://localhost:5000/reservations
+
+EXAMPLE GET RESERVATION OF PARTICULAR CODE:
+curl http://localhost:5000/reservations/aaaa1111aaaa
+
+EXAMPLE DELETE RESERVATION OF PARTICULAR CODE:
+curl http://localhost:5000/reservations/TEST-code -X DELETE -v
+
+EXAMPLE PUT RESERVATION OF PARTICULAR CODE:
+curl http://localhost:5000/reservations/TEST-code -d "event_id=TEST2-event_id" -d "name=TEST2-name" -X PUT -v
