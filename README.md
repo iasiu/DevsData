@@ -4,7 +4,7 @@ Simple app with api for event reservation
 
 ## Requirements
 
-Package    -   Version<br /><br />
+Package    -   Version<br />
 
 aniso8601  -   8.1.1<br />
 certifi    -   2020.12.5<br />
