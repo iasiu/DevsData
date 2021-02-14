@@ -1,6 +1,8 @@
 import flask
 from flask_restful import Api, reqparse, abort, Resource
 from events import Events_data
+import random
+import string
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -83,6 +85,15 @@ def abort_if_event_does_exist(id):
     if int(id) in ids:
         abort(404, message="Event of id {} already exists".format(id))
 
+def generate_reservation_code():
+    length = 12
+    chars = string.ascii_lowercase + string.ascii_uppercase + "0123456789"
+    l_chars = list(chars)
+    code = ""
+    for i in range(length):
+        code += random.choice(l_chars)
+    return code
+
 class Reservations(Resource):
     def get(self):
         return DATA['reservations']
@@ -90,9 +101,9 @@ class Reservations(Resource):
     def post(self):
         args = parser.parse_args()
 
-        r = {'event_id': args['event_id'],
+        r = {'event_id': int(args['event_id']),
          'name': args['name'],
-         'code': args['code'],
+         'code': generate_reservation_code(),
         }
 
         DATA['reservations'].append(r)
