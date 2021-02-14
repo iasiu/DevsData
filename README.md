@@ -30,8 +30,12 @@ wheel      -   0.36.2<br />
 """</br>
 source venv/bin/activate<br />
 python api.py<br />
+"""</br>
+
+"""</br>
+source venv/bin/activate<br />
 python app.py<br />
-"""
+"""</br>
 
 Api.py runs on http://localhost:5000<br />
 App.py runs on http://localhost:4000<br />
