@@ -5,7 +5,7 @@ import random
 import string
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+app.config["DEBUG"] = True #
 api = Api(app)
 
 DATA = {
@@ -101,14 +101,18 @@ class Reservations(Resource):
     def post(self):
         args = parser.parse_args()
 
+        code = generate_reservation_code()
+
         r = {'event_id': int(args['event_id']),
          'name': args['name'],
-         'code': generate_reservation_code(),
+         'code': code,
         }
 
         DATA['reservations'].append(r)
 
-        return DATA['reservations'][-1]
+        for r in DATA['reservations'][-10:]:
+            if r['code'] == code:
+                return r
 
 class Reservation(Resource):
     def get(self, code):

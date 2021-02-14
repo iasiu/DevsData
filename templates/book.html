@@ -21,13 +21,14 @@
     </div>
   </div>
 
-  <form class="" action="/book/{{event['id']}}" method="post">
+  <form class="" action="/booking" method="post">
     <div class="d-flex">
       <div class="p-2">
         <input type="text" name="name" value="" placeholder="Your name">
       </div>
       <div class="p-2">
         <input type="submit" name="" value="Confirm reservation">
+        <input type="hidden" name="event_id" value="{{event['id']}}">
       </div>
     </div>
   </form>
