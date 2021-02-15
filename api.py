@@ -1,6 +1,5 @@
 import flask
 from flask_restful import Api, reqparse, abort, Resource
-from events import Events_data
 import random
 import string
 

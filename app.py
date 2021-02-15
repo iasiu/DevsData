@@ -1,6 +1,5 @@
 import flask
 from flask import render_template, request, redirect, url_for, session
-from events import Events_data
 import requests
 import json
 from werkzeug.exceptions import HTTPException
