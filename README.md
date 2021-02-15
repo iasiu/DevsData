@@ -30,10 +30,7 @@ wheel      -   0.36.2<br />
 """</br>
 source venv/bin/activate<br />
 python api.py<br />
-"""</br>
-
-"""</br>
-source venv/bin/activate<br />
+Ctrl+Z<br />
 python app.py<br />
 """</br>
 
