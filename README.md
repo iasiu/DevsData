@@ -31,6 +31,7 @@ wheel      -   0.36.2<br />
 source venv/bin/activate<br />
 python api.py<br />
 Ctrl+Z<br />
+bg<br />
 python app.py<br />
 """</br>
 
