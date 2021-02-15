@@ -38,6 +38,10 @@ def confirmation():
     data = request.args['data']
     return render_template('confirmation.html', data=json.loads(data))
 
+@app.route('/manage')
+def manage():
+    return redirect('/')
+
 @app.errorhandler(HTTPException)
 def handle_exception(e):
     return redirect('/')
