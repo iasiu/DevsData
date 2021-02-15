@@ -37,8 +37,32 @@ def confirmation():
     data = request.args['data']
     return render_template('confirmation.html', data=json.loads(data))
 
-@app.route('/manage')
+@app.route('/manage', methods=['GET', 'POST'])
 def manage():
+    if request.method == 'GET':
+        return render_template('manage_code.html')
+    else:
+        code = request.form['code']
+        r = requests.get('http://localhost:5000/reservations/' + str(code))
+        res = json.loads(r.text)
+        r2 = requests.get('http://localhost:5000/events/' + str(res['event_id']))
+        ev = json.loads(r2.text)
+        data = {"reservation": res, "event": ev}
+        return render_template('manage.html', data=data)
+
+@app.route('/update', methods=['POST'])
+def update():
+    code = request.form['code']
+    name = request.form['name']
+    event_id = request.form['event_id']
+    payload = {'event_id': event_id, 'name': name}
+    r = requests.put('http://localhost:5000/reservations/' + str(code), params=payload)
+    return redirect('/')
+
+@app.route('/delete', methods=['POST'])
+def delete():
+    code = request.form['code']
+    r = requests.delete('http://localhost:5000/reservations/' + str(code))
     return redirect('/')
 
 @app.errorhandler(HTTPException)

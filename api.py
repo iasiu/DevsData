@@ -133,7 +133,7 @@ class Reservation(Resource):
 
         args = parser.parse_args()
 
-        r = {'event_id': args['event_id'],
+        r = {'event_id': int(args['event_id']),
          'name': args['name'],
          'code': code,
         }
