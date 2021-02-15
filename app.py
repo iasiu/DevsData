@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for, session
 from events import Events_data
 import requests
 import json
+from werkzeug.exceptions import HTTPException
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -36,6 +37,10 @@ def booking():
 def confirmation():
     data = request.args['data']
     return render_template('confirmation.html', data=json.loads(data))
+
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    return redirect('/')
 
 if __name__ == "__main__":
     app.run(port=4000)
