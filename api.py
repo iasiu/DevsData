@@ -2,6 +2,7 @@ import flask
 from flask_restful import Api, reqparse, abort, Resource
 import random
 import string
+from datetime import datetime
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True #
@@ -11,14 +12,14 @@ DATA = {
     'events': [
         {'id': 0,
          'title': 'Jazz Concert',
-         'start_date': '2021-02-14 18:00:00',
-         'end_date': '2021-02-14 21:00:00',
+         'start_date': '2021-02-18 16:00:00',
+         'end_date': '2021-02-18 21:00:00',
          'thumbnail': 'https://media.resources.festicket.com/www/__sized__/photos/1_ZUTKNaz-thumbnail-800x460-90.jpg'
         },
         {'id': 1,
          'title': 'Rock Concert',
-         'start_date': '2021-02-13 20:00:00',
-         'end_date': '2021-02-13 23:00:00',
+         'start_date': '2021-02-21 20:00:00',
+         'end_date': '2021-02-21 23:00:00',
          'thumbnail': 'https://d6u22qyv3ngwz.cloudfront.net/ad/7d7W/great-clips-great-haircut-sale-rock-concert-small-5.jpg'
         },
         {'id': 2,
@@ -29,8 +30,8 @@ DATA = {
         },
         {'id': 3,
          'title': 'Icecream Workshop',
-         'start_date': '2021-02-14 18:00:00',
-         'end_date': '2021-02-14 21:00:00',
+         'start_date': '2021-02-23 18:00:00',
+         'end_date': '2021-02-23 21:00:00',
          'thumbnail': 'https://www.jealousgallery.com/Images/Prints/Dave-Buonaguidi-Have-A-Nice-Day-Ice-Cream-Cones.jpg?Action=thumbnail&Width=500'
         },
 
@@ -65,6 +66,30 @@ def abort_if_reservation_doesnt_exist(code):
 
     if code not in codes:
         abort(404, message="Reservation of code {} doesn't exist".format(code))
+
+def abort_if_reservation_is_for_less_than_two_days_from_now(code):
+    event_id = 0
+    for r in DATA['reservations']:
+        if r['code'] == code:
+            event_id = r['event_id']
+    number = 0
+    for n, e in enumerate(DATA['events']):
+        if e['id'] == event_id:
+            number = n
+
+    now = datetime.now()
+    event_date = datetime.strptime(DATA['events'][number]['start_date'], '%Y-%m-%d %H:%M:%S')
+    diff = event_date - now
+    days_str = ""
+    for c in str(diff):
+        if c != 'd':
+            days_str += c
+        else:
+            break
+    days = int(days_str)
+
+    if days < 2:
+        abort(404, message="This reservation is for an event set for less than 2 days from now, you can't change or cancel it!")
 
 def abort_if_event_doesnt_exist(id):
     ids = []
@@ -122,15 +147,16 @@ class Reservation(Resource):
 
     def delete(self, code):
         abort_if_reservation_doesnt_exist(code)
+        abort_if_reservation_is_for_less_than_two_days_from_now(code)
         for n, reservation in enumerate(DATA['reservations']):
             if reservation['code'] == code:
                 del DATA['reservations'][n]
 
-        return '', 204
+        return 'Successfully deleted the reservation with code {}!'.format(code), 204
 
     def put(self, code):
         abort_if_reservation_doesnt_exist(code)
-
+        abort_if_reservation_is_for_less_than_two_days_from_now(code)
         args = parser.parse_args()
 
         r = {'event_id': int(args['event_id']),
@@ -142,7 +168,7 @@ class Reservation(Resource):
             if reservation['code'] == code:
                 DATA['reservations'][n] = r
 
-        return DATA['reservations'][n], 201
+        return'Successfully updated the reservation with code {}!'.format(code), 201
 
 
 class Events(Resource):
@@ -176,7 +202,7 @@ class Event(Resource):
             if int(event['id']) == int(id):
                 del DATA['events'][n]
 
-        return '', 204
+        return 'Successfully deleted the event with id {}!'.format(id), 204
 
     def put(self, id):
         abort_if_event_doesnt_exist(id)
@@ -194,7 +220,7 @@ class Event(Resource):
             if int(event['id']) == int(id):
                 DATA['events'][n] = e
 
-        return DATA['events'][n], 201
+        return 'Successfully updated the event with id {}!'.format(id), 201
 
 
 api.add_resource(Reservations, '/reservations')
