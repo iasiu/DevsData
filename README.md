@@ -1,6 +1,6 @@
 # Magic Events
 
-Simple app with api for event reservation
+Simple app and api for event reservation.
 
 ## Requirements
 
@@ -26,14 +26,6 @@ Werkzeug   -   1.0.1<br />
 wheel      -   0.36.2<br />
 
 ## Instruction
-
-"""</br>
-source venv/bin/activate<br />
-python api.py<br />
-Ctrl+Z<br />
-bg<br />
-python app.py<br />
-"""</br>
 
 Api.py runs on http://localhost:5000<br />
 App.py runs on http://localhost:4000<br />
