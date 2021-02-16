@@ -196,6 +196,7 @@ class Event(Resource):
 
         return DATA['events'][n], 201
 
+
 api.add_resource(Reservations, '/reservations')
 api.add_resource(Reservation, '/reservations/<code>')
 api.add_resource(Events, '/events')
