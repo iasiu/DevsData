@@ -84,8 +84,8 @@ def update():
 
     if str(r.status_code) == "404":
         return render_template('error.html', msg=json.loads(r.text)['message'])
-    elif str(r.status_code) == "201":
-        return render_template('success.html', msg=json.loads(r.text))
+    elif str(r.status_code) == "200":
+        return render_template('success.html', msg=r.text[1:-2])
     else:
         return render_template('unknown_error.html')
 
@@ -96,8 +96,8 @@ def delete():
 
     if str(r.status_code) == "404":
         return render_template('error.html', msg=json.loads(r.text)['message'])
-    elif str(r.status_code) == "204":
-        return render_template('success.html', msg=json.loads(r.text))
+    elif str(r.status_code) == "200":
+        return render_template('success.html', msg=r.text[1:-2])
     else:
         return render_template('unknown_error.html')
 

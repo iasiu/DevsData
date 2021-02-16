@@ -65,7 +65,7 @@ def abort_if_reservation_doesnt_exist(code):
         codes.append(r['code'])
 
     if code not in codes:
-        abort(404, message="Reservation of code {} doesn't exist".format(code))
+        abort(404, message="Reservation of code {} doesn't exist!".format(code))
 
 def abort_if_reservation_is_for_less_than_two_days_from_now(code):
     event_id = 0
@@ -98,7 +98,7 @@ def abort_if_event_doesnt_exist(id):
         ids.append(e['id'])
 
     if int(id) not in ids:
-        abort(404, message="Event of id {} doesn't exist".format(id))
+        abort(404, message="Event of id {} doesn't exist!".format(id))
 
 def abort_if_event_does_exist(id):
     ids = []
@@ -107,7 +107,7 @@ def abort_if_event_does_exist(id):
         ids.append(e['id'])
 
     if int(id) in ids:
-        abort(404, message="Event of id {} already exists".format(id))
+        abort(404, message="Event of id {} already exists!".format(id))
 
 def generate_reservation_code():
     length = 12
@@ -152,7 +152,7 @@ class Reservation(Resource):
             if reservation['code'] == code:
                 del DATA['reservations'][n]
 
-        return 'Successfully deleted the reservation with code {}!'.format(code), 204
+        return 'Successfully deleted the reservation with code {}!'.format(code), 200
 
     def put(self, code):
         abort_if_reservation_doesnt_exist(code)
@@ -168,7 +168,7 @@ class Reservation(Resource):
             if reservation['code'] == code:
                 DATA['reservations'][n] = r
 
-        return'Successfully updated the reservation with code {}!'.format(code), 201
+        return 'Successfully updated the reservation with code {}!'.format(code), 200
 
 
 class Events(Resource):
@@ -202,7 +202,7 @@ class Event(Resource):
             if int(event['id']) == int(id):
                 del DATA['events'][n]
 
-        return 'Successfully deleted the event with id {}!'.format(id), 204
+        return 'Successfully deleted the event with id {}!'.format(id), 200
 
     def put(self, id):
         abort_if_event_doesnt_exist(id)
@@ -220,7 +220,7 @@ class Event(Resource):
             if int(event['id']) == int(id):
                 DATA['events'][n] = e
 
-        return 'Successfully updated the event with id {}!'.format(id), 201
+        return 'Successfully updated the event with id {}!'.format(id), 200
 
 
 api.add_resource(Reservations, '/reservations')
