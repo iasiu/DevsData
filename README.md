@@ -1,6 +1,6 @@
 # Magic Events
 
-Simple app and api for event reservation.
+Simple app and api for event reservation, made with Flask.
 
 ## Requirements
 
